@@ -1,4 +1,6 @@
-© Copyright by Sabin. E-commerce project developed on the MERN Stack. 
+© Copyright by Sabin.
+<br> 
+E-commerce project developed on the MERN Stack. 
 <br>
 This work represents my BCA 7th-semester college project and is intended for educational purposes only. Any commercial use is prohibited.
 <br>
