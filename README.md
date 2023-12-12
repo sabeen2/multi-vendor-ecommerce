@@ -5,6 +5,7 @@ This work represents my BCA 7th-semester college project and is intended for edu
  Create config/config.env inside backend folder and replace with your own parameters
 
 PORT = ''
+<br>
 DB_URL = ''
 JWT_SECRET_KEY = ''
 JWT_EXPIRES = '7d'
