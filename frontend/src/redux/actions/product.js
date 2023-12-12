@@ -1,5 +1,8 @@
 import axios from "axios";
 import { server } from "../../server";
+import { productReducer } from "../reducers/product";
+
+
 
 // create product
 export const createProduct =

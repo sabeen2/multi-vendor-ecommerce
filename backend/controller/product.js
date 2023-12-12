@@ -91,7 +91,7 @@ router.delete(
         );
       }
     
-      await product.remove();
+      await product.deleteOne();
 
       res.status(201).json({
         success: true,

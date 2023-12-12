@@ -89,7 +89,7 @@ router.get(
   })
 );
 
-// update order status for seller
+// Update order status for seller
 router.put(
   "/update-order-status/:id",
   isSeller,
@@ -100,18 +100,27 @@ router.put(
       if (!order) {
         return next(new ErrorHandler("Order not found with this id", 400));
       }
+
+      const currentStatus = order.status;
+      order.status = req.body.status;
+
       if (req.body.status === "Transferred to delivery partner") {
+        // Reduce stock quantity and increase sold items
+        order.cart.forEach(async (o) => {
+          await updateOrder(o._id, o.qty);
+        });
+      } else if (req.body.status === "Delivered" && currentStatus !== "Transferred to delivery partner") {
+        // Only update product quantities if the status is not "Transferred to delivery partner"
         order.cart.forEach(async (o) => {
           await updateOrder(o._id, o.qty);
         });
       }
 
-      order.status = req.body.status;
-
       if (req.body.status === "Delivered") {
         order.deliveredAt = Date.now();
         order.paymentInfo.status = "Succeeded";
-        const serviceCharge = order.totalPrice * .10;
+        const serviceCharge = order.totalPrice * 0.10;
+
         await updateSellerInfo(order.totalPrice - serviceCharge);
       }
 
@@ -125,15 +134,17 @@ router.put(
       async function updateOrder(id, qty) {
         const product = await Product.findById(id);
 
-        product.stock -= qty;
-        product.sold_out += qty;
-
-        await product.save({ validateBeforeSave: false });
+        // Only update product quantities if the status is not "Transferred to delivery partner"
+        if (currentStatus !== "Transferred to delivery partner") {
+          product.stock -= qty;
+          product.sold_out += qty;
+          await product.save({ validateBeforeSave: false });
+        }
       }
 
       async function updateSellerInfo(amount) {
         const seller = await Shop.findById(req.seller.id);
-        
+
         seller.availableBalance = amount;
 
         await seller.save();
@@ -143,6 +154,8 @@ router.put(
     }
   })
 );
+
+
 
 // give a refund ----- user
 router.put(

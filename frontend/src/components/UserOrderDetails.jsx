@@ -149,7 +149,7 @@ const UserOrderDetails = () => {
             </h5>
             <div className="flex w-full ml-2 pt-1">
               {[1, 2, 3, 4, 5].map((i) =>
-                rating >= i ? (
+                 Math.round(rating) >= i ? (
                   <AiFillStar
                     key={i}
                     className="mr-1 cursor-pointer"
@@ -189,7 +189,7 @@ const UserOrderDetails = () => {
             </div>
             <div
               className={`${styles.button} text-white text-[20px] ml-3`}
-              onClick={rating > 1 ? reviewHandler : null}
+              onClick={rating ? reviewHandler : null}
             >
               Submit
             </div>
@@ -213,8 +213,10 @@ const UserOrderDetails = () => {
               data?.shippingAddress.address2}
           </h4>
           <h4 className=" text-[20px]">{data?.shippingAddress.country}</h4>
-          <h4 className=" text-[20px]">{data?.shippingAddress.city}</h4>
-          <h4 className=" text-[20px]">{data?.user?.phoneNumber}</h4>
+<h4 className=" text-[20px]">{data?.shippingAddress.city}</h4>
+<h4 className=" text-[20px]">Phone Number: {data?.shippingAddress.zipCode}</h4> {/* Display Phone Number */}
+<h4 className=" text-[20px]">Email: {data?.shippingAddress.emailAddress}</h4> {/* Display Email Address */}
+<h4 className=" text-[20px]">Full Name: {data?.shippingAddress.fullName}</h4> {/* Display Full Name */}
         </div>
         <div className="w-full 800px:w-[40%]">
           <h4 className="pt-3 text-[20px]">Payment Info:</h4>
