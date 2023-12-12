@@ -192,7 +192,7 @@ export const navItems = [
     {
       id: 1,
       title: "Computers and Laptops",
-      subTitle: "",
+      subTitle: "sas",
       image_Url:
         "https://cdn.shopify.com/s/files/1/1706/9177/products/NEWAppleMacbookProwithM1ProChip14InchLaptop2021ModelMKGQ3LL_A_16GB_1TBSSD_custommacbd.jpg?v=1659592838",
     },
@@ -218,7 +218,7 @@ export const navItems = [
         "https://cdn-icons-png.flaticon.com/512/3566/3566345.png",
     },
     {
-      id: 4,
+      id: 5,
       title: "Others Appliances",
       subTitle: "",
       image_Url:

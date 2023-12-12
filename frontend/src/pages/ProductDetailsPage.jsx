@@ -6,6 +6,8 @@ import ProductDetails from "../components/Products/ProductDetails";
 import SuggestedProduct from "../components/Products/SuggestedProduct";
 import { useSelector } from "react-redux";
 
+
+
 const ProductDetailsPage = () => {
   const { allProducts } = useSelector((state) => state.products);
   const { allEvents } = useSelector((state) => state.events);
@@ -38,6 +40,14 @@ const ProductDetailsPage = () => {
       <Footer />
     </div>
   );
+
+ 
+
+
+
+
+
+
 };
 
 export default ProductDetailsPage;

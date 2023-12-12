@@ -6,6 +6,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishlist } from "../../redux/actions/wishlist";
 import { addTocart } from "../../redux/actions/cart";
+import { toast } from "react-toastify";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -16,10 +17,15 @@ const Wishlist = ({ setOpenWishlist }) => {
   };
 
   const addToCartHandler = (data) => {
-    const newData = {...data, qty:1};
-    dispatch(addTocart(newData));
-    setOpenWishlist(false);
-  }
+    if (data.stock < 1) {
+      toast.error("Product stock is limited or out of stock!!");
+    } else {
+      const newData = { ...data, qty: 1 };
+      dispatch(addTocart(newData));
+      setOpenWishlist(false);
+    }
+  };
+  
 
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">

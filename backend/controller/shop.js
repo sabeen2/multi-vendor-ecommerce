@@ -11,18 +11,17 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const sendShopToken = require("../utils/shopToken");
 
 // create shop
-router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
+router.post('/create-shop', catchAsyncErrors(async (req, res, next) => {
   try {
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });
     if (sellerEmail) {
-      return next(new ErrorHandler("User already exists", 400));
+      return next(new ErrorHandler('User already exists', 400));
     }
 
     const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-      folder: "avatars",
+      folder: 'avatars',
     });
-
 
     const seller = {
       name: req.body.name,
@@ -35,9 +34,11 @@ router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
       address: req.body.address,
       phoneNumber: req.body.phoneNumber,
       zipCode: req.body.zipCode,
+      status: 'unapproved', // Add 'status' property
     };
 
     const activationToken = createActivationToken(seller);
+
 
     const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
 
@@ -67,37 +68,36 @@ const createActivationToken = (seller) => {
 };
 
 // activate user
-router.post(
-  "/activation",
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      const { activation_token } = req.body;
+router.post('/activation', catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { activation_token } = req.body;
 
-      const newSeller = jwt.verify(
-        activation_token,
-        process.env.ACTIVATION_SECRET
-      );
+    const newSeller = jwt.verify(
+      activation_token,
+      process.env.ACTIVATION_SECRET
+    );
 
-      if (!newSeller) {
-        return next(new ErrorHandler("Invalid token", 400));
-      }
-      const { name, email, password, avatar, zipCode, address, phoneNumber } =
-        newSeller;
+    if (!newSeller) {
+      return next(new ErrorHandler('Invalid token', 400));
+    }
 
-      let seller = await Shop.findOne({ email });
+    const { name, email, password, avatar, zipCode, address, phoneNumber } = newSeller;
 
-      if (seller) {
-        return next(new ErrorHandler("User already exists", 400));
-      }
+    let seller = await Shop.findOne({ email });
+
+    if (seller) {
+      return next(new ErrorHandler('User already exists', 400));
+    }
 
       seller = await Shop.create({
-        name,
-        email,
-        avatar,
-        password,
-        zipCode,
-        address,
-        phoneNumber,
+      name,
+      email,
+      avatar,
+      password,
+      zipCode,
+      address,
+      phoneNumber,
+      status: 'approved', // Update the status to 'approved'
       });
 
       sendShopToken(seller, 201, res);
@@ -108,21 +108,21 @@ router.post(
 );
 
 // login shop
-router.post(
-  "/login-shop",
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      const { email, password } = req.body;
+router.post('/login-shop', catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-      if (!email || !password) {
-        return next(new ErrorHandler("Please provide the all fields!", 400));
-      }
+    if (!email || !password) {
+      return next(new ErrorHandler('Please provide all fields!', 400));
+    }
 
-      const user = await Shop.findOne({ email }).select("+password");
+    const user = await Shop.findOne({ email }).select('+password');
 
-      if (!user) {
-        return next(new ErrorHandler("User doesn't exists!", 400));
-      }
+    if (!user) {
+      return next(new ErrorHandler("User doesn't exist", 400));
+    }
+
+    
 
       const isPasswordValid = await user.comparePassword(password);
 
@@ -333,6 +333,34 @@ router.put(
     }
   })
 );
+
+// Approve seller
+router.put(
+  '/approve-seller/:id',
+  isAuthenticated, // Ensure the user is authenticated (admin)
+  isAdmin('Admin'), // Ensure the user is an admin
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const seller = await Shop.findById(req.params.id);
+
+      if (!seller) {
+        return next(new ErrorHandler('Seller not found', 400));
+      }
+
+      // Update the seller's approved status
+      seller.approved = true;
+      await seller.save();
+
+      res.status(200).json({
+        success: true,
+        message: 'Seller approved successfully!',
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 
 // delete seller withdraw merthods --- only seller
 router.delete(

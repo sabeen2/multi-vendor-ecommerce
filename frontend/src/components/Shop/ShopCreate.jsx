@@ -1,21 +1,49 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { server } from "../../server";
+import { server} from "../../server";
 import { toast } from "react-toastify";
 import { RxAvatar } from "react-icons/rx";
+// Import the SellerApprovalMessage component
+import SellerApprovalMessage from '../SellerApprovalMessage';
 
 const ShopCreate = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState();
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [zipCode, setZipCode] = useState();
+  const [zipCode, setZipCode] = useState("");
   const [avatar, setAvatar] = useState();
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
+
+
+  // Add isSeller state
+  const [isSeller, setIsSeller] = useState(false);
+
+  // Check if the seller is approved
+  useEffect(() => {
+    // Replace this condition with your logic for seller approval
+    // For example, make an API call to check the seller's approval status
+    const checkSellerApproval = async () => {
+      try {
+        // Make an API call to check the seller's approval status
+        const response = await axios.get(`${server}/api/check-seller-approval`);
+
+        // Update the isSeller state based on the response
+        setIsSeller(response.data.isSeller);
+      } catch (error) {
+        // Handle the error
+        console.error('Error checking seller approval:', error);
+      }
+    };
+
+    // Call the function to check seller approval
+    checkSellerApproval();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,13 +60,16 @@ const ShopCreate = () => {
       })
       .then((res) => {
         toast.success(res.data.message);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setAvatar();
-        setZipCode();
-        setAddress("");
-        setPhoneNumber();
+        // Set registration successful
+        setRegistrationSuccessful(true);
+        // Clear form fields
+        setName('');
+        setEmail('');
+        setPassword('');
+        setAvatar('');
+        setZipCode('');
+        setAddress('');
+        setPhoneNumber('');
       })
       .catch((error) => {
         toast.error(error.response.data.message);
@@ -65,18 +96,28 @@ const ShopCreate = () => {
         </h2>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-[35rem]">
+
+
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+           {/* Display a message for successful registration */}
+          {registrationSuccessful ? (
+            <div className="text-center">
+              <p>Your shop registration is pending approval from the admin. You will be able to log in once approved.</p>
+            </div>
+          ) : (
           <form className="space-y-6" onSubmit={handleSubmit}>
+
+            
             <div>
               <label
-                htmlFor="email"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
                 Shop Name
               </label>
               <div className="mt-1">
                 <input
-                  type="name"
+                  type="text"
                   name="name"
                   required
                   value={name}
@@ -88,14 +129,14 @@ const ShopCreate = () => {
 
             <div>
               <label
-                htmlFor="email"
+                htmlFor="phoneNumber"
                 className="block text-sm font-medium text-gray-700"
               >
                 Phone Number
               </label>
               <div className="mt-1">
                 <input
-                  type="number"
+                  type="tel"
                   name="phone-number"
                   required
                   value={phoneNumber}
@@ -127,14 +168,14 @@ const ShopCreate = () => {
 
             <div>
               <label
-                htmlFor="email"
+                htmlFor="address"
                 className="block text-sm font-medium text-gray-700"
               >
                 Address
               </label>
               <div className="mt-1">
                 <input
-                  type="address"
+                  type="text"
                   name="address"
                   required
                   value={address}
@@ -146,14 +187,14 @@ const ShopCreate = () => {
 
             <div>
               <label
-                htmlFor="email"
+                htmlFor="zipCode"
                 className="block text-sm font-medium text-gray-700"
               >
                 Zip Code
               </label>
               <div className="mt-1">
                 <input
-                  type="number"
+                  type="text"
                   name="zipcode"
                   required
                   value={zipCode}
@@ -215,7 +256,7 @@ const ShopCreate = () => {
                 </span>
                 <label
                   htmlFor="file-input"
-                  className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                  className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover-bg-gray-50"
                 >
                   <span>Upload a file</span>
                   <input
@@ -232,7 +273,7 @@ const ShopCreate = () => {
             <div>
               <button
                 type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover-bg-blue-700"
               >
                 Submit
               </button>
@@ -244,6 +285,7 @@ const ShopCreate = () => {
               </Link>
             </div>
           </form>
+          )}
         </div>
       </div>
     </div>

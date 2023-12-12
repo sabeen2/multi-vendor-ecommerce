@@ -142,7 +142,7 @@ const DashboardHero = () => {
         </div>
       </div>
       <br />
-      <h3 className="text-[22px] font-Poppins pb-2">Latest Orders</h3>
+      {/* <h3 className="text-[22px] font-Poppins pb-2">Latest Orders</h3>
       <div className="w-full min-h-[45vh] bg-white rounded">
       <DataGrid
         rows={row}
@@ -151,7 +151,7 @@ const DashboardHero = () => {
         disableSelectionOnClick
         autoHeight
       />
-      </div>
+      </div> */}
     </div>
   );
 };

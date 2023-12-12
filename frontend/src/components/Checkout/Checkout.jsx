@@ -13,7 +13,7 @@ const Checkout = () => {
   const { cart } = useSelector((state) => state.cart);
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
-  const [userInfo, setUserInfo] = useState(false);
+  const [userInfo, setUserInfo] = useState(true);
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [zipCode, setZipCode] = useState(null);
@@ -36,6 +36,7 @@ const Checkout = () => {
       zipCode,
       country,
       city,
+      
     };
 
     const orderData = {
@@ -44,9 +45,19 @@ const Checkout = () => {
       subTotalPrice,
       shipping,
       discountPrice,
-      shippingAddress,
+      shippingAddress: {
+        address1,
+        address2,
+        zipCode,
+        country,
+        city,
+        fullName: user.name,        // Add Full Name
+        emailAddress: user.email,  // Add Email Address
+        phoneNumber: user.phoneNumber,  // Add Phone Number
+      },
       user,
-    }
+    };
+    
 
     // update local storage with the updated orders array
     localStorage.setItem("latestOrder", JSON.stringify(orderData));
@@ -187,7 +198,7 @@ const ShippingInfo = ({
 
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
-            <label className="block pb-2">Phone Number</label>
+            <label className="block pb-2">Zip Code</label>
             <input
               type="number"
               required
@@ -196,9 +207,9 @@ const ShippingInfo = ({
             />
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">Zip Code</label>
+            <label className="block pb-2">Phone Number</label>
             <input
-              type="number"
+              type="tel" maxLength={10}
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
               required
