@@ -13,7 +13,7 @@ For product recommendation, it uses the Jacquard similarity calculation algorith
 
  -----------------------------------------------------------
 
- __ Features for admin: __
+**Features for admin:**
 <br> 
 View dashboard
 <br> 
@@ -31,7 +31,7 @@ Monitor events
 
 <br>
 
-__ Features for Vendor: __
+**Features for Vendor:** 
 <br>
 Account Creation and Login 
 <br>
@@ -44,7 +44,7 @@ Customer Communication via Chat
 Account Settings Modification
 <br>
 
-__ Features for Customer: __
+**Features for Customer: **
 <br>
 Browse Products, Categories, and Events
 <br>
@@ -70,7 +70,7 @@ Update Account Settings
 <br>
  
  -----------------------------------------------------------
-__ Create config/config.env inside backend folder and replace with your own parameters __
+ Create config/config.env inside backend folder and replace with your own parameters 
 <br>
 <br>
 <br>
