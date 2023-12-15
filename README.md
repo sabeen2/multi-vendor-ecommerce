@@ -16,54 +16,35 @@ For product recommendation, it uses the Jacquard similarity calculation algorith
 **Features for admin:**
 <br> 
 - View dashboard
-<br> 
 - Access all orders
-<br> 
 - Browse products
-<br> 
 - Review all sellers
-<br> 
 - Manage and oversee users
-<br> 
 - Administer seller activities
-<br> 
 - Monitor events
 
 <br>
 
 **Features for Vendor:** 
 <br>
-- Account Creation and Login 
-<br>
+- Account Creation and Login
 - Order and Event Management
-<br>
 - Coupon and Product Administration
-<br>
 - Customer Communication via Chat
-<br>
 - Account Settings Modification
 <br>
 
 **Features for Customer:**
 <br>
 - Browse Products, Categories, and Events
-<br>
 - Account Creation/Login
-<br>
 - Add Items to Cart
-<br>
 - View Order History
-<br>
 - Track Orders
-<br>
 - Check Order Status
-<br>
 - Add Items to Wishlist
-<br>
 - Product Search Functionality
-<br>
 - Online Checkout and Payment
-<br>
 - Update Account Settings
 <br>
 <br>
