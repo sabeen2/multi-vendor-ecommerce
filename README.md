@@ -7,38 +7,67 @@ This work represents my BCA 7th-semester college project and is intended for edu
 For product recommendation, it uses the Jacquard similarity calculation algorithm. It calculates the similarity of products based on product tags and recommends the four most similar products
 <br>
 
-** Features for admin: **
+ -----------------------------------------------------------
+
+ __ Features for admin: __
+<br> 
 View dashboard
+<br> 
 Access all orders
+<br> 
 Browse products
+<br> 
 Review all sellers
+<br> 
 Manage and oversee users
+<br> 
 Administer seller activities
+<br> 
 Monitor events
 
 <br>
 
-** Features for Vendor: **
-Account Creation and Login
+__ Features for Vendor: __
+<br>
+Account Creation and Login 
+<br>
 Order and Event Management
+<br>
 Coupon and Product Administration
+<br>
 Customer Communication via Chat
+<br>
 Account Settings Modification
+<br>
+<
 
-** Features for Customer: **
+__ Features for Customer: __
+<br>
 Browse Products, Categories, and Events
+<br>
 Account Creation/Login
+<br>
 Add Items to Cart
+<br>
 View Order History
+<br>
 Track Orders
+<br>
 Check Order Status
+<br>
 Add Items to Wishlist
+<br>
 Product Search Functionality
+<br>
 Online Checkout and Payment
+<br>
 Update Account Settings
+<br>
+<br>
+<br>
  
  -----------------------------------------------------------
-** Create config/config.env inside backend folder and replace with your own parameters **
+__ Create config/config.env inside backend folder and replace with your own parameters __
 <br>
 <br>
 <br>
