@@ -44,7 +44,7 @@ Customer Communication via Chat
 Account Settings Modification
 <br>
 
-**Features for Customer: **
+**Features for Customer:**
 <br>
 Browse Products, Categories, and Events
 <br>
