@@ -9,7 +9,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://multi-vendor-ecommerce-frontend.vercel.app/",
+      "https://multi-vendor-ecommerce-frontend.vercel.app",
     ],
     credentials: true,
   })

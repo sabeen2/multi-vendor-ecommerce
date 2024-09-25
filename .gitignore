@@ -1,6 +1,8 @@
 # dependencies
 backend/config/.env
 frontend/node_modules
+frontend/env.js
+# frontend/server.js
 backend/node_modules
 socket/node_modules
 
