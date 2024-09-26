@@ -8,28 +8,23 @@ const Shop = require("../model/shop");
 const cloudinary = require("cloudinary");
 const ErrorHandler = require("../utils/ErrorHandler");
 
-const calculateSimilarityScore = (productA, productB) => {
-  let score = 0;
+const cosineSimilarity = (vecA, vecB) => {
+  const dotProduct = vecA.reduce((sum, val, i) => sum + val * vecB[i], 0);
+  const normA = Math.sqrt(vecA.reduce((sum, val) => sum + val * val, 0));
+  const normB = Math.sqrt(vecB.reduce((sum, val) => sum + val * val, 0));
+  return dotProduct / (normA * normB);
+};
 
-  // Compare categories
-  if (productA.category === productB.category) {
-    score += 2; // Higher weight for category match
-  }
-
-  // Compare tags (assuming tags are comma-separated strings)
-  const tagsA = productA.tags ? productA.tags.split(",") : [];
-  const tagsB = productB.tags ? productB.tags.split(",") : [];
-  const commonTags = tagsA.filter((tag) => tagsB.includes(tag));
-  score += commonTags.length; // Add 1 point for each common tag
-
-  // Compare price range (within 20% range)
-  const priceA = productA.discountPrice || productA.originalPrice;
-  const priceB = productB.discountPrice || productB.originalPrice;
-  if (Math.abs(priceA - priceB) / priceA <= 0.2) {
-    score += 1;
-  }
-
-  return score;
+// Function to create a tag vector
+const createTagVector = (tags, allTags) => {
+  const vector = new Array(allTags.length).fill(0);
+  tags.forEach((tag) => {
+    const index = allTags.indexOf(tag.trim());
+    if (index !== -1) {
+      vector[index] = 1; // Mark the presence of the tag
+    }
+  });
+  return vector;
 };
 
 // create product
@@ -222,46 +217,80 @@ router.get(
 );
 
 // Get recommended products
-router.get(
-  "/get-recommended-products/:id",
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      const { id } = req.params;
+// router.get(
+//   "/get-recommended-products/:id",
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       const { id } = req.params;
 
-      // Find the product by ID
-      const targetProduct = await Product.findById(id);
-      if (!targetProduct) {
-        return next(new ErrorHandler("Product not found", 404));
-      }
+//       // Find the product by ID
+//       const targetProduct = await Product.findById(id);
+//       if (!targetProduct) {
+//         return next(new ErrorHandler("Product not found", 404));
+//       }
 
-      // Get all other products (excluding the target product itself)
-      const allProducts = await Product.find({ _id: { $ne: id } });
+//       // Get all other products (excluding the target product itself)
+//       const allProducts = await Product.find({ _id: { $ne: id } });
 
-      // Calculate similarity scores for each product
-      const recommendedProducts = allProducts
-        .map((product) => ({
-          product,
-          score: calculateSimilarityScore(targetProduct, product),
-        }))
-        .sort((a, b) => b.score - a.score) // Sort by similarity score in descending order
-        .slice(0, 8) // Get the top 8 recommended products
-        .map((item) => item.product); // Extract the products
+//       // Calculate similarity scores for each product
+//       const recommendedProducts = allProducts
+//         .map((product) => ({
+//           product,
+//           score: calculateSimilarityScore(targetProduct, product),
+//         }))
+//         .sort((a, b) => b.score - a.score) // Sort by similarity score in descending order
+//         .slice(0, 8) // Get the top 8 recommended products
+//         .map((item) => item.product); // Extract the products
 
-      // Ensure we have at least 3 recommendations
-      if (recommendedProducts.length < 3) {
-        return next(
-          new ErrorHandler("Not enough recommended products found", 400)
-        );
-      }
+//       // Ensure we have at least 3 recommendations
+//       if (recommendedProducts.length < 3) {
+//         return next(
+//           new ErrorHandler("Not enough recommended products found", 400)
+//         );
+//       }
 
-      res.status(200).json({
-        success: true,
-        recommendedProducts,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error, 400));
-    }
-  })
-);
+//       res.status(200).json({
+//         success: true,
+//         recommendedProducts,
+//       });
+//     } catch (error) {
+//       return next(new ErrorHandler(error, 400));
+//     }
+//   })
+// );
+
+router.get("/similar-recommendations/:productId", async (req, res) => {
+  const { productId } = req.params;
+
+  try {
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).send("Product not found");
+
+    const allProducts = await Product.find();
+    const allTags = Array.from(
+      new Set(allProducts.flatMap((p) => p.tags.split(",")))
+    ); // Unique tags from all products
+
+    const productVector = createTagVector(product.tags.split(","), allTags);
+    const recommendations = [];
+
+    allProducts.forEach((p) => {
+      const comparisonVector = createTagVector(p.tags.split(","), allTags);
+      const similarity = cosineSimilarity(productVector, comparisonVector);
+      recommendations.push({ product: p, similarity });
+    });
+
+    // Sort recommendations by similarity
+    recommendations.sort((a, b) => b.similarity - a.similarity);
+    const topRecommendations = recommendations
+      .slice(0, 5)
+      .map((r) => r.product); // Get top 5 products
+
+    res.json(topRecommendations);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
 
 module.exports = router;

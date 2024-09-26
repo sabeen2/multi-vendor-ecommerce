@@ -24,8 +24,6 @@ const ProductDetailsPage = () => {
     }
   }, [id, eventData, allProducts, allEvents]); // Add id, eventData, allProducts, and allEvents as dependencies
 
-  console.log(data?._id);
-
   return (
     <div>
       <Header />
