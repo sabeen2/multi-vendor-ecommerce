@@ -6,48 +6,33 @@ import ProductDetails from "../components/Products/ProductDetails";
 import SuggestedProduct from "../components/Products/SuggestedProduct";
 import { useSelector } from "react-redux";
 
-
-
 const ProductDetailsPage = () => {
   const { allProducts } = useSelector((state) => state.products);
   const { allEvents } = useSelector((state) => state.events);
-  const { id } = useParams();
+  const { id } = useParams(); // Get the product/event ID from URL
   const [data, setData] = useState(null);
   const [searchParams] = useSearchParams();
-  const eventData = searchParams.get("isEvent");
+  const eventData = searchParams.get("isEvent"); // Check if it's an event
 
   useEffect(() => {
     if (eventData !== null) {
-      const data = allEvents && allEvents.find((i) => i._id === id);
-      setData(data);
+      const event = allEvents?.find((i) => i._id === id);
+      setData(event);
     } else {
-      const data = allProducts && allProducts.find((i) => i._id === id);
-      setData(data);
+      const product = allProducts?.find((i) => i._id === id);
+      setData(product);
     }
-  }, [allProducts, allEvents]);
+  }, [id, eventData, allProducts, allEvents]); // Add id, eventData, allProducts, and allEvents as dependencies
 
   return (
     <div>
       <Header />
       <ProductDetails data={data} />
-        {
-          !eventData && (
-            <>
-            {data && <SuggestedProduct data={data} />}
-            </>
-          )
-        }
+      {!eventData && data && <SuggestedProduct data={data} />}{" "}
+      {/* Only show suggested products if it's not an event */}
       <Footer />
     </div>
   );
-
- 
-
-
-
-
-
-
 };
 
 export default ProductDetailsPage;
