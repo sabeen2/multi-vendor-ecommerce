@@ -247,10 +247,10 @@ const ProductDetails = ({ data }) => {
           </div>
         ) : null}
       </div>
-      <div className="w-[20%] 800px:w-[30%] mr-4 ">
+      {/* <div className="w-[20%] 800px:w-[30%] mr-4 ">
         {" "}
         <SideProduct data={data || {}} />
-      </div>
+      </div> */}
     </div>
   );
 };

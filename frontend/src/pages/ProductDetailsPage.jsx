@@ -4,6 +4,7 @@ import Footer from "../components/Layout/Footer";
 import Header from "../components/Layout/Header";
 import ProductDetails from "../components/Products/ProductDetails";
 import SuggestedProduct from "../components/Products/SuggestedProduct";
+import RelatedProducts from "../components/Products/RelatedProducts";
 import { useSelector } from "react-redux";
 
 const ProductDetailsPage = () => {
@@ -28,7 +29,8 @@ const ProductDetailsPage = () => {
     <div>
       <Header />
       <ProductDetails data={data} />
-      {!eventData && data && <SuggestedProduct data={data} />}{" "}
+      {/* {!eventData && data && <SuggestedProduct data={data} />}{" "} */}
+      {!eventData && data && <RelatedProducts data={data} />}{" "}
       {/* Only show suggested products if it's not an event */}
       <Footer />
     </div>
