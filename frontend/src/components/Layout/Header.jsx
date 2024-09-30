@@ -58,8 +58,9 @@ const Header = ({ activeHeading }) => {
           <div>
             <Link to="/">
               <img
+                className = "w-24"
                 src="https://api.kkinni.com/UploadsPlayStoreImage/59e621f0-390e-4d4d-b0e2-70f0847befeb.png"
-                 src="https://api.kkinni.com/UploadsPlayStoreImage/59e621f0-390e-4d4d-b0e2-70f0847befeb.png"
+               
                 alt=""
               />
             </Link>
