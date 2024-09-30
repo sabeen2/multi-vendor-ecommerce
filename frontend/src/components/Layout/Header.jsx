@@ -219,9 +219,11 @@ const Header = ({ activeHeading }) => {
           <div>
             <Link to="/">
               <img
-                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
+{/*                 src="https://shopo.quomodothemes.website/assets/images/logo.svg" */}
                 alt=""
-                className="mt-3 cursor-pointer"
+                className="mt-3 cursor-pointer w-24"
+              src="https://api.kkinni.com/UploadsPlayStoreImage/59e621f0-390e-4d4d-b0e2-70f0847befeb.png"
+              
               />
             </Link>
           </div>
