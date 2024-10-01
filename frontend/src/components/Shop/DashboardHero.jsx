@@ -79,7 +79,7 @@ const DashboardHero = () => {
     row.push({
         id: item._id,
         itemsQty: item.cart.reduce((acc, item) => acc + item.qty, 0),
-        total: "US$ " + item.totalPrice,
+        total: " NRP रु " + item.totalPrice,
         status: item.status,
       });
   });
