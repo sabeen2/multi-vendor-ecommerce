@@ -10,7 +10,8 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://multi-vendor-ecommerce-frontend.vercel.app",
-      "https://joystore.com.np"
+      "https://joystore.com.np",
+      "https://www.joystore.com.np",
     ],
     credentials: true,
   })
